@@ -1,9 +1,9 @@
 import pandas as pd
 
 # Load your data
-awards = pd.read_csv("Data/awards_data.csv")
-player_data = pd.read_csv("Data/player_stats.csv")
-team_data = pd.read_csv("Data/team_stats.csv")
+awards = pd.read_csv("../CSV files/awards_data.csv")
+player_data = pd.read_csv("../CSV files/player_stats.csv")
+team_data = pd.read_csv("../CSV files/team_stats.csv")
 #rebounding_data = pd.read_csv("venv/Data/team_rebounding_data_22.csv")
 
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -15,6 +15,7 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+
 
 # Data Cleaning & Preprocessing
 
@@ -135,13 +136,24 @@ pred_df = pd.DataFrame(data = {
 
 data = pd.merge(data,pred_df, on = 'nbapersonid', how = 'left')
 
-df = pd.DataFrame(data)
+new_data = pd.DataFrame(data)
+
+print(new_data)
+
 
 dir = r"C:\Users\aidan\PycharmProjects\NBA_Analytics\Data"
 
-file_path = os.path.join(dir, "output.xlsx")
 
-df.to_excel(file_path, index = False, engine = 'openpyxl')
+
+project_directory = os.path.dirname(os.path.abspath(__file__))
+
+if not os.path.exists(dir):
+    print('Invalid Path')
+else:
+    file_name = 'new_data.csv'
+    file_path = os.path.join(dir, file_name)
+    new_data.to_csv(file_path, index = False)
+
 
 '''
 probs = pd.DataFrame(new_player_probs, columns = voting_reg.classes_)
@@ -164,3 +176,4 @@ plt.bar(range(X_train.shape[1]), importances[indices], align="center")
 plt.xticks(range(X_train.shape[1]), [feature_names[i] for i in indices], rotation=45)
 plt.xlim([-1, X_train.shape[1]])
 plt.show()
+
